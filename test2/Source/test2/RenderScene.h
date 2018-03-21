@@ -34,5 +34,7 @@ private:
 	
 	AMyPlayerController* MyPC;
 	
-
+	bool bShowHud;
+	
+	float LastTime;
 };

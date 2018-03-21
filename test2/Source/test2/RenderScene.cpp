@@ -19,10 +19,14 @@ URenderScene::URenderScene()
 void URenderScene::BeginPlay()
 {
 	Super::BeginPlay();
+	bShowHud = false;
 
 	MyPC = Cast<AMyPlayerController>(GetWorld()->GetFirstPlayerController());
 	MyPC->SetObjList(Objects);
-	MyPC->SetShowHUD(true);
+	MyPC->SetShowHUD(bShowHud);
+	
+	LastTime = GetWorld()->GetTimeSeconds();
+
 	
 }
 
@@ -32,6 +36,15 @@ void URenderScene::TickComponent(float DeltaTime, ELevelTick TickType, FActorCom
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	// ...
+	float CurrentTime = GetWorld()->GetTimeSeconds();
+
+	if (CurrentTime - LastTime > 1.5f) {
+
+		MyPC->SetShowHUD(bShowHud);
+		bShowHud = !bShowHud;
+
+		LastTime = CurrentTime;
+	}
+	
 }
 

@@ -5,6 +5,7 @@
 #include "GameFramework/HUD.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Runtime/Engine/Classes/Engine/World.h"
 #include "MyHUD.generated.h"
 
 /**
@@ -52,7 +53,9 @@ private:
 		FVector2D(1,1)
 	};
 
-	FVector2D ViewportSize = FVector2D(1, 1);
+	APlayerController* PC;
+	int32 ViewportWidth;
+	int32 ViewportHeight;
 
 	FString SaveDirectory = FString("C:/Users/user/Documents/BoundingBoxResult");
 	//FString FileName = FString("BoundingBox_");
@@ -61,6 +64,6 @@ private:
 	
 	int32 FrameNum = 0;
 
-
+	
 	
 };

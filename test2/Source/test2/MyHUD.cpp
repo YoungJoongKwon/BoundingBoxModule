@@ -8,14 +8,14 @@
 #include "Runtime/Core/Public/HAL/PlatformFilemanager.h"
 #include "Runtime/Core/Public/GenericPlatform/GenericPlatformFile.h"
 #include "Runtime/Core/Public/Misc/Paths.h"
-#include "Engine/Engine.h".
+#include "Engine/Engine.h"
 
 // GetOwningPlayerController()->
 
 void AMyHUD::BeginPlay() {
 
-	
-	
+	PC = GetWorld()->GetFirstPlayerController();
+	PC->GetViewportSize(ViewportWidth, ViewportHeight);
 }
 
 void AMyHUD::DrawHUD() {
@@ -28,37 +28,24 @@ void AMyHUD::DrawHUD() {
 		for (AActor* object : Objects) {
 
 			FString ObjName = *object->GetName();
-
 			//UE_LOG(LogTemp, Warning, TEXT("Drawing object name: %s\n"), *ObjName);
-
-			// Build 2D bounding box of actor in screen space
-			//FBox2D ActorBox2D = FBox2D();
-
-			//TODO: print out the origin and extent of this object in "txt" file format
 
 			//Get Actor Bounds                
 			const FBox EachActorBounds = object->GetComponentsBoundingBox(true); //All Components 
-			
 			//Center
 			const FVector BoxCenter = EachActorBounds.GetCenter();
-
 			//Extents
 			const FVector BoxExtents = EachActorBounds.GetExtent();
 
 			float minX = 0.0f, minY = 0.0f, maxX= 0.0f, maxY= 0.0f;
-
 			for (uint8 BoundsPointItr = 0; BoundsPointItr < 8; BoundsPointItr++)
 			{
 
 				const FVector WorldLocation = BoxCenter + (BoundsPointMapping[BoundsPointItr] * BoxExtents);
 				
 				FVector2D ScreenLocation;
-				GetWorld()->GetFirstPlayerController()->ProjectWorldLocationToScreen(WorldLocation, ScreenLocation, false);
-				//ActorBox2D += FVector2D(ScreenLocation.X, ScreenLocation.Y);
+				PC->ProjectWorldLocationToScreen(WorldLocation, ScreenLocation, false);
 				
-				//UE_LOG(LogTemp, Warning, TEXT("screen location x is : %f\n"), ScreenLocation.X);
-				//UE_LOG(LogTemp, Warning, TEXT("screen location y is : %f\n"), ScreenLocation.Y);
-
 				if (BoundsPointItr == 0) {
 
 					minX = ScreenLocation.X;
@@ -82,22 +69,35 @@ void AMyHUD::DrawHUD() {
 			FVector2D Extent2D = FVector2D(width/2.0f, height/2.0f);
 
 			bool ToRender = false;
-
+			
 			// check if this object is inside the camera view
 			for (uint8 BoundsPointItr = 0; BoundsPointItr < 4; BoundsPointItr++) 
 			{
-				const FVector2D ScreenLocation = Center2D + (BoundsPointMapping2D[BoundsPointItr]*Extent2D);
+				const FVector2D ScreenPosition = Center2D + (BoundsPointMapping2D[BoundsPointItr]*Extent2D);
+				int32 pointX = (int32)ScreenPosition.X;
+				int32 pointY = (int32)ScreenPosition.Y;
 
+				if ((0 <= pointX) && (pointX <= ViewportWidth) && (0 <= pointY) && (pointY <= ViewportHeight)) { ToRender = true; }
 			}
 
+			if (ToRender) {
 
-			// render bounding box
-			DrawRect(FLinearColor(255, 0, 0, .30f), minX, minY, width, height);
+				if (minX < 0) { minX = 0.0f; }
+				if (minX >(float)ViewportWidth) { minX = (float)ViewportWidth; }
 
-			// index of object, origin x, origin y, width, height
-			OutputTXT.AppendInt(ObjIndex);
-			OutputTXT += (" " + FString::SanitizeFloat(minX) + " " + FString::SanitizeFloat(minY) + " " + FString::SanitizeFloat(width) + " " + FString::SanitizeFloat(height) + "\r\n");
+				if (minY < 0) { minY = 0.0f; }
+				if (minY >(float)ViewportHeight) { minY = (float)ViewportHeight; }
 
+				width = maxX - minX;
+				height = maxY - minY;
+
+				// render bounding box
+				DrawRect(FLinearColor(255, 0, 0, .30f), minX, minY, width, height);
+
+				// index of object, origin x, origin y, width, height
+				OutputTXT.AppendInt(ObjIndex);
+				OutputTXT += (" " + ObjName + " " + FString::SanitizeFloat(minX) + " " + FString::SanitizeFloat(minY) + " " + FString::SanitizeFloat(width) + " " + FString::SanitizeFloat(height) + "\r\n");
+			}
 			ObjIndex++;
 		}
 
