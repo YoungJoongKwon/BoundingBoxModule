@@ -30,11 +30,8 @@ void URenderScene::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// frame number
-	FrameNum = 0;
-
 	// controlling mode
-	Mode = -2; 
+	mode = -2; 
 
 	// for camera move
 	//Matinee->Pause();
@@ -76,51 +73,51 @@ void URenderScene::TickComponent(float DeltaTime, ELevelTick TickType, FActorCom
 	//if (GetWorld()->GetTimeSeconds() - LastTime > 1.0f) {
 	if (CurrentTime - LastTime > 1.0f) {
 
-		if (Mode == -2) {
+		if (mode == -2) {
 			Matinee->Pause();
-			Mode = -1;
+			mode = -1;
 		}
-		else if (Mode == -1) {
-			Mode = 0;
+		else if (mode == -1) {
+			mode = 0;
 		}
-		else if (Mode == 0) { // original mode
+		else if (mode == 0) { // original mode
 
 			
 			Volume->bUnbound = false;
 			FScreenshotRequest::RequestScreenshot("original", false, true);
 
-			Mode = 1;
+			mode = 1;
 			
 		}
-		else if (Mode == 1) { // bounding box mode
+		else if (mode == 1) { // bounding box mode
 			
 			MyPC->SetShowHUD(true);
 			FScreenshotRequest::RequestScreenshot("boundingbox", false, true);
-			Mode = 2;
+			mode = 2;
 			
 			
 		}
-		else if (Mode == 2) { // segmentation mode
+		else if (mode == 2) { // segmentation mode
 			
 			MyPC->SetShowHUD(false);
 			Volume->bUnbound = true;
 			
 			FScreenshotRequest::RequestScreenshot("segmentation", false, true);
 			
-			Mode = 3;
+			mode = 3;
 			
 		}
-		else if (Mode == 3) { // play video
+		else if (mode == 3) { // play video
 			
 			Matinee->Play();
-			Mode = 4;
+			mode = 4;
 		}
-		else if (Mode == 4) {
-			Mode = 5;
+		else if (mode == 4) {
+			mode = 5;
 		}
-		else if (Mode == 5) {
+		else if (mode == 5) {
 			Matinee->Pause();
-			Mode = 0;
+			mode = 0;
 		}
 
 

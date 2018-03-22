@@ -46,7 +46,7 @@ private:
 	
 	float LastTime;
 
-	int32 Mode;
+	int32 mode;
 
-	int32 FrameNum;
+
 };

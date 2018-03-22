@@ -57,7 +57,7 @@ private:
 	int32 ViewportWidth;
 	int32 ViewportHeight;
 
-	FString SaveDirectory = FString("C:/Users/user/Documents/IROS_UE4/Module_BoundingBox_Git/test2/Saved/BBoxPoints/");
+	FString SaveDirectory = FString("C:/Users/user/Documents/BoundingBoxResult");
 	//FString FileName = FString("BoundingBox_");
 	FString FileName = FString("BoundingBox.txt");
 	bool AllowOverwriting = false;
