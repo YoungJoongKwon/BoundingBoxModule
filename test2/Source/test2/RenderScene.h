@@ -49,4 +49,9 @@ private:
 	int32 Mode;
 
 	int32 FrameNum;
+
+	FString OriginalImage = "o";
+	FString SegmentedImage = "s";
+	FString BoundingBoxImage = "b";
+
 };

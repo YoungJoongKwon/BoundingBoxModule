@@ -87,15 +87,18 @@ void URenderScene::TickComponent(float DeltaTime, ELevelTick TickType, FActorCom
 
 			
 			Volume->bUnbound = false;
-			FScreenshotRequest::RequestScreenshot("original", false, true);
-
+			//FScreenshotRequest::RequestScreenshot("original", false, false);
+			FString name = OriginalImage + FString::FromInt(FrameNum) + ".png";
+			FScreenshotRequest::RequestScreenshot(*name, false, false);
 			Mode = 1;
 			
 		}
 		else if (Mode == 1) { // bounding box mode
 			
 			MyPC->SetShowHUD(true);
-			FScreenshotRequest::RequestScreenshot("boundingbox", false, true);
+			//FScreenshotRequest::RequestScreenshot("boundingbox", false, false);
+			FString name = BoundingBoxImage + FString::FromInt(FrameNum) + ".png";
+			FScreenshotRequest::RequestScreenshot(*name, false, false);
 			Mode = 2;
 			
 			
@@ -105,8 +108,10 @@ void URenderScene::TickComponent(float DeltaTime, ELevelTick TickType, FActorCom
 			MyPC->SetShowHUD(false);
 			Volume->bUnbound = true;
 			
-			FScreenshotRequest::RequestScreenshot("segmentation", false, true);
-			
+			//FScreenshotRequest::RequestScreenshot("segmentation", false, false);
+			FString name = SegmentedImage + FString::FromInt(FrameNum) + ".png";
+			FScreenshotRequest::RequestScreenshot(*name, false, false);
+
 			Mode = 3;
 			
 		}
@@ -121,12 +126,15 @@ void URenderScene::TickComponent(float DeltaTime, ELevelTick TickType, FActorCom
 		else if (Mode == 5) {
 			Matinee->Pause();
 			Mode = 0;
+			FrameNum++;
+			MyPC->SetFrameNum(FrameNum);
 		}
 
 
-
+		
 		LastTime = CurrentTime;
 	}
+	
 	
 }
 

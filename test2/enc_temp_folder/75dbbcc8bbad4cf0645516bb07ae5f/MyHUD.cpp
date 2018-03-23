@@ -76,7 +76,7 @@ void AMyHUD::DrawHUD() {
 				const FVector2D ScreenPosition = Center2D + (BoundsPointMapping2D[BoundsPointItr]*Extent2D);
 				int32 pointX = (int32)ScreenPosition.X;
 				int32 pointY = (int32)ScreenPosition.Y;
-			
+
 				if ((0 < pointX) && (pointX < ViewportWidth) && (0 < pointY) && (pointY < ViewportHeight)) { ToRender = true; }
 			}
 
@@ -101,7 +101,7 @@ void AMyHUD::DrawHUD() {
 
 					// index of object, origin x, origin y, width, height
 					OutputTXT.AppendInt(ObjIndex);
-					OutputTXT += (" " + ObjName + " " + FString::FromInt((int32)minX) + " " + FString::FromInt((int32)minY) + " " + FString::FromInt((int32)width) + " " + FString::FromInt((int32)height) + "\r\n");
+					OutputTXT += (" " + ObjName + " " + FString::SanitizeFloat(minX) + " " + FString::SanitizeFloat(minY) + " " + FString::SanitizeFloat(width) + " " + FString::SanitizeFloat(height) + "\r\n");
 
 				}
 			}

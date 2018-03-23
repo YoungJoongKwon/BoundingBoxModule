@@ -29,3 +29,8 @@ void AMyPlayerController::SetObjList(TArray<AActor*> DefaultObjList) {
 	HUDPtr->SetObjList(DefaultObjList);
 	UE_LOG(LogTemp, Warning, TEXT("MyPC: Set ObjList On.\n"));
 }
+
+void AMyPlayerController::SetFrameNum(int32 num)
+{
+	HUDPtr->SetFrameNumber(num);
+}

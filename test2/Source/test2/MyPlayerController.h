@@ -23,6 +23,7 @@ public:
 		AMyPlayerController();
 		void SetShowHUD(bool);
 		void SetObjList(TArray<AActor*>);
+		void SetFrameNum(int32);
 
 		AMyHUD* HUDPtr;
 		
